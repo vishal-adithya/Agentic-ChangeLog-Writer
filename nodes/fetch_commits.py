@@ -2,7 +2,23 @@ from state import State
 import os
 from datetime import datetime
 from github import Github,GithubException
+import re
 
+def get_gitdetails(state: State) -> State:
+    pattern = r"github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$"
+
+    matches = re.search(pattern,state["repo_url"])
+
+    if matches:
+        git_author = matches.group(1)
+        git_repo = matches.group(2)
+
+        return {"git_author":git_author,"git_repo":git_repo}
+
+    else:
+        print("Enter a valid Github URL!")
+
+    
 def fetch_commits(state:State) -> dict:
 
     try:
@@ -10,8 +26,8 @@ def fetch_commits(state:State) -> dict:
         gh = Github(github_token)
         print(github_token)
 
-        start = datetime.strptime(state["start_date"],r"%Y-%m-%d")
-        end = datetime.strptime(state["end_date"],r"%Y-%m-%d")
+        start = datetime.strptime(state["start_date"],"%Y-%m-%d")
+        end = datetime.strptime(state["end_date"],"%Y-%m-%d")
         
         repo = gh.get_repo(state["repo_url"])
         raw_commits = repo.get_commits(
@@ -26,7 +42,7 @@ def fetch_commits(state:State) -> dict:
                     "sha": commit.sha[:7],
                     "author": commit.commit.author.name,
                     "message": commit.commit.message,
-                    "date":commit.commit.author.date.strftime(r"%Y-%m-%d"),
+                    "date":commit.commit.author.date.strftime("%Y-%m-%d"),
                     "url": commit.html_url
                 }
             )
