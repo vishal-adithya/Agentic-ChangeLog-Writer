@@ -1,8 +1,8 @@
-from nodes.fetch_commits import fetch_commits,git_info
+from nodes.agent import fetch_commits,git_info
 from langgraph.graph import StateGraph,START,END
 
 from state import State
-from nodes.fetch_commits import fetch_commits,git_info
+from nodes.agent import fetch_commits,git_info
 
 if __name__ == "__main__":
     graph_builder = StateGraph(State)
