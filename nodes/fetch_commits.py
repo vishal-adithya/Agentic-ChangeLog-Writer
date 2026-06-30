@@ -4,7 +4,7 @@ from datetime import datetime
 from github import Github,GithubException
 import re
 
-def get_gitdetails(state: State) -> State:
+def git_info(state: State) -> State:
     pattern = r"github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$"
 
     matches = re.search(pattern,state["repo_url"])
