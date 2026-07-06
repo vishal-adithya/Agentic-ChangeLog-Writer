@@ -13,7 +13,7 @@ from langchain_core.globals import set_debug
 set_debug(True)
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-2.5-flash-lite",
     temperature=0.2)
 
 @tool
@@ -142,7 +142,7 @@ Possible errors:
     return {"commits": commits, "error": None}
 
 
-def create_agent_with_tools(question):
+def agent_pipeline(question):
     tools = [git_info, fetch_commits]
     agent = create_agent(
         llm,
@@ -180,22 +180,22 @@ Preferred changelog structure:
 
 # Changelog
 
-## 🚀 Features
+##  Features
 - ...
 
-## 🐛 Bug Fixes
+##  Bug Fixes
 - ...
 
-## ⚡ Improvements
+##  Improvements
 - ...
 
-## 📚 Documentation
+##  Documentation
 - ...
 
-## 🧹 Maintenance
+##  Maintenance
 - ...
 
-## 💥 Breaking Changes
+##  Breaking Changes
 - ...
 
 If a category has no changes, omit it.
@@ -203,14 +203,14 @@ If a category has no changes, omit it.
 Keep the changelog concise, readable, and suitable for publishing in release notes.""")
     result = agent.invoke({"messages":[{"role":"user","content":question}]})
     print("===================================================================================================")
-    last_message = result["messages"][-1]
+    last = result["messages"][-1]
 
-    if isinstance(last_message.content, list):
-        print(last_message.content[0]["text"])
-    else:
-        print(last_message.content)
+    if isinstance(last.content, list):
+        return last.content[0]["text"]
+
+    return last.content
 
 qn = "https://github.com/vishal-adithya/changelog-test-repo, from 2026-06-29 to 2026-07-02"
 
 
-create_agent_with_tools(qn)
+agent_pipeline(qn)
