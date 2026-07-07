@@ -1,12 +1,15 @@
 from langsmith import Client
+
 from dotenv import load_dotenv
 load_dotenv()
 
-client = Client()
+def changelog_writer_eval_v1():
 
-DATASET_NAME = "changelog-writer-eval-v1"
+    client = Client()
 
-EXAMPLES = [
+    DATASET_NAME = "changelog-writer-eval-v1"
+
+    EXAMPLES = [
     {
         "inputs": {
             "question": "https://github.com/vishal-adithya/changelog-test-repo, from 2026-06-29 to 2026-07-02"
@@ -23,12 +26,14 @@ EXAMPLES = [
             "should_find_commits": False,
         },
     },
-]
+    ]
 
-dataset = client.create_dataset(dataset_name=DATASET_NAME)
-client.create_examples(
-    inputs=[ex["inputs"] for ex in EXAMPLES],
-    outputs=[ex["outputs"] for ex in EXAMPLES],
-    dataset_id=dataset.id)
+    dataset = client.create_dataset(dataset_name=DATASET_NAME)
+    client.create_examples(
+        inputs=[ex["inputs"] for ex in EXAMPLES],
+        outputs=[ex["outputs"] for ex in EXAMPLES],
+        dataset_id=dataset.id)
 
-print("Dataset Created!!")
+    print("Dataset Created!!")
+
+changelog_writer_eval_v1()

@@ -13,7 +13,7 @@ from langchain_core.globals import set_debug
 set_debug(True)
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash-lite",
+    model="gemini-2.5-flash",
     temperature=0.2)
 
 @tool
