@@ -5,6 +5,8 @@ class Evaluators:
     
     @staticmethod
     def contains_headers(run,exp):
+        if not run.outputs or "output" not in run.outputs:
+            return {"key": "has_sections", "score": None}
         
         ans = run.outputs["output"]
         pass_ = ("Features" in ans) or ("Bug Fixes" in ans) or ("Improvements" in ans)
@@ -16,7 +18,9 @@ class Evaluators:
     
     @staticmethod
     def handles_no_commit_record(run,exp):
-
+        if not run.outputs or "output" not in run.outputs:
+            return {"key": "has_sections", "score": None}
+        
         if exp.outputs.get("should_find_commits") is not False:
             return {
                 "key": "handles_no_commits",
