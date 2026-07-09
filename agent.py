@@ -16,6 +16,15 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     temperature=0.2)
 
+from guardrails import Guard
+from guardrails.hub import DetectPromptInjection
+from guardrails_func import sanitize_commit
+
+injection_gaurd = Guard().use(
+    DetectPromptInjection,
+    on_fail = "exception"
+)
+
 @tool
 def git_info(repo_url:str) -> dict:
     """
@@ -123,7 +132,9 @@ Possible errors:
                 {
                     "sha": commit.sha[:7],
                     "author": commit.commit.author.name,
-                    "message": commit.commit.message,
+                    "message": sanitize_commit(
+                        message=commit.commit.message,
+                        gaurd = injection_gaurd),
                     "date":commit.commit.author.date.strftime("%Y-%m-%d"),
                     "url": commit.html_url
                 }
