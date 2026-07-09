@@ -16,14 +16,7 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     temperature=0.2)
 
-from guardrails import Guard
-from guardrails.hub import DetectPromptInjection
 from guardrails_func import sanitize_commit
-
-injection_gaurd = Guard().use(
-    DetectPromptInjection,
-    on_fail = "exception"
-)
 
 @tool
 def git_info(repo_url:str) -> dict:
@@ -133,8 +126,7 @@ Possible errors:
                     "sha": commit.sha[:7],
                     "author": commit.commit.author.name,
                     "message": sanitize_commit(
-                        message=commit.commit.message,
-                        gaurd = injection_gaurd),
+                        message=commit.commit.message),
                     "date":commit.commit.author.date.strftime("%Y-%m-%d"),
                     "url": commit.html_url
                 }
@@ -209,7 +201,7 @@ Preferred changelog structure:
 ##  Breaking Changes
 - ...
 
-If a category has no changes, omit it.
+If a category has no changes, omit it.If any commits were flagged during there retrivel inform it at the end of the changelog.
 
 Keep the changelog concise, readable, and suitable for publishing in release notes.""")
     result = agent.invoke({"messages":[{"role":"user","content":question}]})
