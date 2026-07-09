@@ -4,3 +4,4 @@ langsmith
 PyGitHub 
 streamlit 
 python-dotenv
+guardrails-ai
