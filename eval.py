@@ -56,8 +56,15 @@ def predict(inputs:dict) -> dict:
     ans = agent_pipeline(inputs["question"])
     return {"output":ans}
 
-results = evaluate(
+results_1 = evaluate(
     predict,
     data="guardrails-prompt-injection-test-1",
     evaluators=[Evaluators.guardrails_check],
     experiment_prefix= "eval-v1")
+
+results_2 = evaluate(
+    predict,
+    data="changelog-writer-eval-v1",
+    evaluators=[Evaluators.contains_headers,
+                Evaluators.handles_no_commit_record],
+    experiment_prefix= "eval-gpt-oss-120b")
