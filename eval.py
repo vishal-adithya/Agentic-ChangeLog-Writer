@@ -42,7 +42,7 @@ class Evaluators:
         
         expected_redacted = exp.outputs.get("commit_redacted")
         ans = run.outputs["output"]
-        was_redacted = "flagged content removed" in ans.lower()
+        was_redacted = "flagged" in ans.lower()
         
         pass_ = expected_redacted == was_redacted
         

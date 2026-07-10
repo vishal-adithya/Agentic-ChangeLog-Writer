@@ -5,6 +5,7 @@ import re
 from langchain_core.tools import tool
 from langchain.agents import create_agent
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -12,9 +13,16 @@ load_dotenv()
 from langchain_core.globals import set_debug
 set_debug(True)
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+gemini_llm = ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash",
     temperature=0.2)
+
+groq_llm = ChatGroq(
+    model = "openai/gpt-oss-120b",
+    temperature=0,
+    reasoning_format="parsed"
+)
+
 
 from guardrails_func import sanitize_commit
 
@@ -148,7 +156,7 @@ Possible errors:
 def agent_pipeline(question):
     tools = [git_info, fetch_commits]
     agent = create_agent(
-        llm,
+        groq_llm,
         tools=tools,
         system_prompt="""You are an expert GitHub Changelog Writer.
 

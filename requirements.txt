@@ -5,3 +5,4 @@ PyGitHub
 streamlit 
 python-dotenv
 guardrails-ai
+langchain-groq
