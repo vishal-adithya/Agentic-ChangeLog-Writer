@@ -214,15 +214,9 @@ If a category has no changes, omit it.If any commits were flagged during there r
 Keep the changelog concise, readable, and suitable for publishing in release notes.
 If you are unable to find any commits in the specified date range mention at the end that (COMMITS_NOT_FOUND)""")
     result = agent.invoke({"messages":[{"role":"user","content":question}]})
-    print("===================================================================================================")
     last = result["messages"][-1]
 
     if isinstance(last.content, list):
         return last.content[0]["text"]
 
     return last.content
-
-qn = "https://github.com/vishal-adithya/changelog-test-repo, from 2026-06-29 to 2026-07-02"
-
-
-agent_pipeline(qn)

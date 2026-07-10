@@ -6,4 +6,4 @@ streamlit
 python-dotenv
 guardrails-ai
 langchain-groq
-gradio-client
+gradio
