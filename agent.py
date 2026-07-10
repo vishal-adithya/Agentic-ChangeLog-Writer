@@ -211,7 +211,8 @@ Preferred changelog structure:
 
 If a category has no changes, omit it.If any commits were flagged during there retrivel inform it at the end of the changelog.
 
-Keep the changelog concise, readable, and suitable for publishing in release notes.""")
+Keep the changelog concise, readable, and suitable for publishing in release notes.
+If you are unable to find any commits in the specified date range mention at the end that (COMMITS_NOT_FOUND)""")
     result = agent.invoke({"messages":[{"role":"user","content":question}]})
     print("===================================================================================================")
     last = result["messages"][-1]

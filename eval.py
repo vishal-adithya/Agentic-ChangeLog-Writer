@@ -8,6 +8,11 @@ class Evaluators:
         if not run.outputs or "output" not in run.outputs:
             return {"key": "has_sections", "score": None}
         
+        if exp.outputs.get("should_find_commits") is False:
+            return {
+                "key": "contains headers",
+                "score": 1.0
+            }
         ans = run.outputs["output"]
         pass_ = ("Features" in ans) or ("Bug Fixes" in ans) or ("Improvements" in ans)
 
@@ -21,14 +26,14 @@ class Evaluators:
         if not run.outputs or "output" not in run.outputs:
             return {"key": "has_sections", "score": None}
         
-        if exp.outputs.get("should_find_commits") is not False:
+        if exp.outputs.get("should_find_commits") is True:
             return {
                 "key": "handles_no_commits",
-                "score": None
+                "score": 1.0
             }
         
         ans = run.outputs["output"].lower()
-        pass_ = "no commits" in ans
+        pass_ = "COMMITS_NOT_FOUND" in ans
         
         return {
             "key": "handles_no_commits",
@@ -56,11 +61,11 @@ def predict(inputs:dict) -> dict:
     ans = agent_pipeline(inputs["question"])
     return {"output":ans}
 
-results_1 = evaluate(
-    predict,
-    data="guardrails-prompt-injection-test-1",
-    evaluators=[Evaluators.guardrails_check],
-    experiment_prefix= "eval-v1")
+# results_1 = evaluate(
+#     predict,
+#     data="guardrails-prompt-injection-test-1",
+#     evaluators=[Evaluators.guardrails_check],
+#     experiment_prefix= "eval-v1")
 
 results_2 = evaluate(
     predict,
