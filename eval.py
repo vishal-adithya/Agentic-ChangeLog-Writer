@@ -22,17 +22,14 @@ class Evaluators:
             }
     
     @staticmethod
-    def handles_no_commit_record(run,exp):
-        if not run.outputs or "output" not in run.outputs:
-            return {"key": "has_sections", "score": None}
-        
+    def handles_no_commit_record(run,exp):    
         if exp.outputs.get("should_find_commits") is True:
             return {
                 "key": "handles_no_commits",
                 "score": 1.0
             }
         
-        ans = run.outputs["output"].lower()
+        ans = run.outputs["output"]
         pass_ = "COMMITS_NOT_FOUND" in ans
         
         return {
