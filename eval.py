@@ -119,4 +119,4 @@ results_2 = evaluate(
     predict,
     data="changelog-writer-eval-models",
     evaluators=[Evaluators.judge_changelog],
-    experiment_prefix= "gpt-oss-120b")
+    experiment_prefix= "qwen3.6-27b")
