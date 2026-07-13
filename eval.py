@@ -66,6 +66,6 @@ def predict(inputs:dict) -> dict:
 
 results_2 = evaluate(
     predict,
-    data="changelog-writer-eval-v1",
+    data="changelog-writer-eval-models",
     evaluators=ALL_EVALUATORS,
-    experiment_prefix= "eval-gpt-oss-120b")
+    experiment_prefix= "gpt-oss-120b")
