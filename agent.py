@@ -18,7 +18,7 @@ gemini_llm = ChatGoogleGenerativeAI(
     temperature=0.2)
 
 groq_llm = ChatGroq(
-    model = "qwen/qwen3.6-27b",
+    model = "openai/gpt-oss-120b",
     temperature=0,
     reasoning_format="parsed"
 )
