@@ -1,8 +1,12 @@
 import re
 import json
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
  
-judge_llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0)
+judge_llm = ChatGroq(
+    model = "openai/gpt-oss-20b",
+    temperature=0,
+    reasoning_format="parsed"
+)
  
 SHA_PATTERN = re.compile(r"\b[0-9a-f]{7}\b")
  
