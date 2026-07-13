@@ -1,6 +1,6 @@
 from agent import agent_pipeline
 from langsmith import evaluate,traceable
-
+from eval_judge import ALL_EVALUATORS
 class Evaluators:
     
     @staticmethod
@@ -67,6 +67,5 @@ def predict(inputs:dict) -> dict:
 results_2 = evaluate(
     predict,
     data="changelog-writer-eval-v1",
-    evaluators=[Evaluators.contains_headers,
-                Evaluators.handles_no_commit_record],
+    evaluators=ALL_EVALUATORS,
     experiment_prefix= "eval-gpt-oss-120b")
