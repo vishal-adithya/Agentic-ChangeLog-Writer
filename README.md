@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="Agentic Changelog Writer logo" width="220"/>
+  <img src="assets/logo.png" alt="Agentic Changelog Writer logo" width="220"/>
 </p>
 
 <h1 align="center">Agentic Changelog Writer</h1>
@@ -24,8 +24,6 @@ An LLM agent that turns raw GitHub commit history into clean, publishable releas
   a word of text. Save it as assets/demo.png or assets/demo.gif and swap the
   placeholder line below.
 -->
-<p align="center"><em>🖼️ Demo screenshot/GIF goes here — see "Adding the missing images" below.</em></p>
-
 ---
 
 ## What it does
@@ -59,35 +57,9 @@ All of it runs from a single Gradio interface, with the changelog rendered live 
 
 ## Architecture
 
-```
-GitHub Repo URL + Date Range
-            │
-            ▼
-    ┌───────────────┐
-    │   git_info    │  extracts {owner, repo} from the URL
-    └───────┬───────┘
-            ▼
-    ┌───────────────┐
-    │ fetch_commits │  calls the GitHub API for commits in range
-    └───────┬───────┘
-            │
-            ▼
-    ┌───────────────────────┐
-    │ sanitize_commit       │  regex-based prompt-injection guardrail
-    │ (guardrails_func.py)  │  runs on every commit message
-    └───────┬───────────────┘
-            ▼
-    ┌───────────────────────┐
-    │ LangChain Agent       │  groq_llm (gpt-oss-120b)
-    │ (agent.py)            │  decides tool order, writes the changelog
-    └───────┬───────────────┘
-            ▼
-     Structured Markdown Changelog
-            │
-            ▼
-       Gradio UI (app.py)
-   render • raw view • download
-```
+<p align="center">
+  <img src="assets/architecture.png" alt="Agentic Changelog Writer architecture diagram" width="620"/>
+</p>
 
 ## Tech Stack
 
@@ -105,14 +77,14 @@ GitHub Repo URL + Date Range
 
 This project was built incrementally and evaluated at each stage rather than written all at once — the commit history tells that story directly:
 
-1. **Foundation** — basic commit-fetching script (`fetch_commits.py`) and shared state definitions.
-2. **Tool-ified GitHub access** — added a `git_info` node so the agent can parse any repo URL on its own, wrapped in proper error handling for missing tokens, 404s, and invalid URLs.
+1. **Foundation** — basic commit-fetching script (`fetch_commits`) and shared state definitions.
+2. **Tool-ified GitHub access** — added a `git_info` tool so the agent can parse any repo URL on its own, wrapped in proper error handling for missing tokens, 404s, and invalid URLs.
 3. **Agent refactor** — moved from a single procedural script to a LangChain tool-calling agent architecture, giving the model control over which tool to call and when.
 4. **Evaluation framework** — built a LangSmith dataset and custom evaluators (`contains_headers`, `handles_no_commit_record`) before adding any new features, to have a quality baseline to compare against.
 5. **Guardrails** — added prompt-injection detection for commit messages, first via an LLM-based check, then moved to a faster regex-based approach after weighing latency and reliability.
 6. **Groq migration** — switched primary inference to Groq for speed, alongside the injection detection work.
 7. **Second evaluation pipeline** — a dedicated guardrails-focused eval dataset to confirm the sanitizer actually redacts injected content without over-triggering on legitimate commits.
-8. **UI** — shipped the Gradio front end and project logo.
+8. **UI** — shipped the Gradio front end.
 9. **Model bake-off** — ran the full evaluation suite against `gpt-oss-120b`, `gpt-oss-20b`, and `qwen3.6-27b`, with results recorded for comparison.
 
 ## Evaluation & Testing
@@ -123,11 +95,9 @@ Quality isn't just eyeballed — it's measured with LangSmith:
 - `guardrails-prompt-injection-test-1`: confirms injected instructions inside commit messages get redacted, and that clean commits are left untouched.
 - **LLM-as-judge**: an independent model scores each generated changelog 1–5 against a strict rubric (structure, grouping, prioritization, honesty, readability), rather than relying on string matching alone.
 
-<!--
-  📸 ADD AN IMAGE HERE (optional but a strong resume touch): a screenshot or
-  chart of your LangSmith experiment results comparing gpt-oss-120b vs
-  gpt-oss-20b vs qwen3.6-27b scores. Save as assets/eval-results.png.
--->
+<p align="center">
+  <img src="assets/eval-results.png" alt="Model evaluation results" width="700"/>
+</p>
 
 ## Getting Started
 
@@ -168,28 +138,8 @@ This launches the Gradio interface locally. Enter a GitHub repo URL, pick a star
 python create_dataset.py   # builds the LangSmith datasets (one-time)
 python eval.py              # runs the agent against the dataset and scores it
 ```
-
-## Roadmap
-
-- [ ] Finish wiring `main.py` into a LangGraph-based orchestration layer for more granular node-level tracing.
-- [ ] Expand the guardrail beyond regex to catch more subtle injection phrasing.
-- [ ] Add support for filtering commits by contributor or file path.
-- [ ] Publish evaluation results as a dashboard rather than raw LangSmith runs.
-
-## Adding the missing images
-
-This README references a few images that make the project easier to scan at a glance but that only you can capture, since they depend on your running app and your LangSmith account:
-
-| Placeholder | What to capture | Suggested path |
-|---|---|---|
-| Demo screenshot/GIF | The Gradio app with a real repo URL, date range, and a generated changelog visible | `assets/demo.png` or `assets/demo.gif` |
-| Architecture diagram | Optional — a cleaner version of the ASCII diagram above, e.g. made in Excalidraw or Figma | `assets/architecture.png` |
-| Evaluation results | A screenshot or chart of the LangSmith experiment comparing gpt-oss-120b / gpt-oss-20b / qwen3.6-27b scores | `assets/eval-results.png` |
-
-Create an `assets/` folder at the repo root, drop the images in, and update the `<!-- -->` placeholder comments above with real `![alt](assets/filename.png)` tags.
-
 ## Author
 
-**Vishal Adithya** — [GitHub](https://github.com/vishal-adithya)
+**Vishal Adithya A** — [GitHub](https://github.com/vishal-adithya)
 
-Built as part of an ongoing portfolio of agentic AI systems, alongside a scientific claim-verification pipeline (TruthLens) and a multi-agent shopping assistant.
+Built as part of an ongoing portfolio of Agentic AI systems.

@@ -87,7 +87,7 @@ with gr.Blocks(
             placeholder="GITHUB_TOKEN",
         )
  
-    gr.Image("logo.png")
+    gr.Image(os.path.join("assets","logo.png"))
     gr.Markdown("Generate a changelog for a GitHub repo over a given date range.")
  
     with gr.Group():
